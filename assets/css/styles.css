@@ -591,3 +591,22 @@ body {
   background: linear-gradient(135deg, #5b8cff, #8fd3f4);
   border-radius: 2px;
 }
+
+/* ===== Active Logo State ===== */
+
+.logo.active {
+  color: #8fd3f4;
+  font-weight: 600;
+  position: relative;
+}
+
+.logo.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(135deg, #5b8cff, #8fd3f4);
+  border-radius: 2px;
+}
