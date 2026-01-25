@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Week 5 — Your AI Doesn’t Fail Randomly. It Fails Strategically.</title>
+  <meta name="description" content="Phase 2 Week 5: Adversarial ML basics — why AI systems fail under opposition, and why security fixes don’t scale." />
+
+  <!-- Minimal “AI-Thara” inspired theme (self-contained) -->
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --card:#0F1730;
+      --card2:#101B3A;
+      --text:#E7ECFF;
+      --muted:#A9B4E6;
+      --line:rgba(255,255,255,.10);
+      --glow:rgba(110,231,183,.18);
+      --aqua:#6EE7B7;
+      --violet:#8B5CF6;
+      --cyan:#22D3EE;
+      --warn:#FBBF24;
+      --danger:#FB7185;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --r: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(139,92,246,.22), transparent 55%),
+        radial-gradient(900px 500px at 80% 10%, rgba(34,211,238,.18), transparent 60%),
+        radial-gradient(700px 500px at 50% 80%, rgba(110,231,183,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+    }
+    a{color:var(--aqua); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width: 980px; margin: 0 auto; padding: 28px 18px 72px}
+    .hero{
+      border:1px solid var(--line);
+      border-radius: calc(var(--r) + 8px);
+      background: linear-gradient(180deg, rgba(15,23,48,.75), rgba(15,23,48,.35));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(900px 200px at 20% 0%, rgba(110,231,183,.25), transparent 60%),
+        radial-gradient(700px 220px at 80% 10%, rgba(139,92,246,.22), transparent 60%);
+      filter: blur(14px);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .hero-inner{position:relative; padding: 28px 26px 22px}
+    .kicker{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      font-family:var(--mono);
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing:.02em;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 6px 10px;
+      border:1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(16,27,58,.55);
+      box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: var(--aqua);
+      box-shadow: 0 0 0 6px rgba(110,231,183,.12);
+    }
+    h1{
+      margin: 14px 0 10px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+    .sub{
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 78ch;
+    }
+    .meta{
+      margin-top: 16px;
+      display:flex; gap:14px; flex-wrap:wrap;
+      color: var(--muted);
+      font-size: 13px;
+      font-family: var(--mono);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    @media (min-width: 900px){
+      .grid{grid-template-columns: 1.2fr .8fr}
+    }
+    .card{
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      background: linear-gradient(180deg, rgba(16,27,58,.72), rgba(16,27,58,.35));
+      box-shadow: 0 18px 50px rgba(0,0,0,.25);
+      padding: 18px 18px;
+    }
+    .card h2{
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing:-0.01em;
+    }
+    .card p{margin: 10px 0; color: var(--text); line-height:1.75}
+    .muted{color: var(--muted)}
+    .hr{
+      height:1px; background: var(--line);
+      margin: 14px 0;
+    }
+    .callout{
+      border:1px solid rgba(110,231,183,.25);
+      background: radial-gradient(500px 120px at 10% 0%, rgba(110,231,183,.12), transparent 60%),
+                  rgba(16,27,58,.45);
+      border-radius: var(--r);
+      padding: 14px 14px;
+      margin: 12px 0;
+    }
+    .callout strong{color: var(--aqua)}
+    .warn{
+      border-color: rgba(251,191,36,.28);
+      background: radial-gradient(500px 120px at 10% 0%, rgba(251,191,36,.12), transparent 60%),
+                  rgba(16,27,58,.45);
+    }
+    .danger{
+      border-color: rgba(251,113,133,.28);
+      background: radial-gradient(500px 120px at 10% 0%, rgba(251,113,133,.10), transparent 60%),
+                  rgba(16,27,58,.45);
+    }
+    ul{margin: 8px 0 0 20px; padding: 0}
+    li{margin: 6px 0; color: var(--text); line-height:1.7}
+    .table{
+      width:100%;
+      border-collapse: collapse;
+      overflow:hidden;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      margin-top: 10px;
+    }
+    .table th, .table td{
+      padding: 12px 12px;
+      border-bottom:1px solid var(--line);
+      vertical-align: top;
+      text-align:left;
+      font-size: 14px;
+      line-height:1.55;
+    }
+    .table th{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing:.03em;
+      background: rgba(15,23,48,.6);
+    }
+    .table tr:last-child td{border-bottom:none}
+    code{
+      font-family: var(--mono);
+      font-size: 13px;
+      color: #D7FFF2;
+      background: rgba(110,231,183,.10);
+      border: 1px solid rgba(110,231,183,.18);
+      padding: 2px 6px;
+      border-radius: 8px;
+    }
+    pre{
+      margin: 12px 0 0;
+      padding: 14px 14px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: rgba(15,23,48,.65);
+      overflow:auto;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+    pre code{
+      border:none; background: transparent; padding:0; border-radius:0; color: var(--text);
+      font-size: 13px;
+    }
+    .footer{
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      font-family: var(--mono);
+      text-align:center;
+    }
+    .btnrow{display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px}
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: rgba(16,27,58,.55);
+      color: var(--text);
+      text-decoration:none;
+      box-shadow: 0 14px 40px rgba(0,0,0,.20);
+      font-family: var(--mono);
+      font-size: 13px;
+    }
+    .btn:hover{border-color: rgba(110,231,183,.35)}
+    .spark{
+      width:10px; height:10px; border-radius: 3px;
+      background: linear-gradient(135deg, var(--aqua), var(--violet));
+      box-shadow: 0 0 0 6px rgba(139,92,246,.10);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <article class="hero">
+      <div class="hero-inner">
+        <div class="kicker">
+          <span class="pill"><span class="dot"></span> Urielle-AI / Yampolskiy-Inspired Roadmap</span>
+          <span class="pill">Phase 2 • Week 5</span>
+          <span class="pill">Theme: Adversarial ML Basics</span>
+        </div>
+
+        <h1>Your AI Doesn’t Fail Randomly. It Fails Strategically.</h1>
+        <p class="sub">
+          Most AI programs break not because the model is “wrong,” but because the environment becomes <em>adversarial</em>.
+          If your system only works when nobody tries to manipulate it, then it doesn’t work in the real world.
+        </p>
+
+        <div class="meta">
+          <span>🧠 Mental shift: “What if the system succeeds at the wrong goal?”</span>
+          <span>🛡️ Week focus: exploitability & resilience</span>
+          <span>⚙️ Audience: enterprise + governance builders</span>
+        </div>
+      </div>
+    </article>
+
+    <section class="grid">
+      <div class="card">
+        <h2>1) Adversarial ML, in one sentence</h2>
+        <p>
+          <strong>Adversarial ML</strong> is the study of how models fail when someone intentionally shapes the inputs, data, or context to force harmful outcomes.
+        </p>
+
+        <div class="callout">
+          <p class="muted" style="margin:0;">
+            Traditional assumption: <code>Input → Model → Output</code><br/>
+            Real-world assumption: <code>Attacker → manipulates Input → Model → Harmful Output</code>
+          </p>
+        </div>
+
+        <h2 style="margin-top:14px;">2) The three attack families you must know</h2>
+
+        <div class="hr"></div>
+
+        <h2 style="font-size:16px;margin:0 0 6px;">A) Adversarial examples</h2>
+        <p class="muted" style="margin-top:0;">
+          Tiny input changes → huge output changes. The model is not “broken” — it is <em>exploitable</em>.
+        </p>
+
+        <h2 style="font-size:16px;margin:14px 0 6px;">B) Distribution shift attacks</h2>
+        <p class="muted" style="margin-top:0;">
+          Your model works in clean, expected settings… and fails when the world deviates (edge cases, new behavior, pressure, novelty).
+        </p>
+
+        <h2 style="font-size:16px;margin:14px 0 6px;">C) Data poisoning</h2>
+        <p class="muted" style="margin-top:0;">
+          Attackers don’t “fight the output.” They attack the <em>learning process</em> so the system gradually aligns with the wrong objective.
+        </p>
+
+        <pre><code>// The real risk pattern
+Model behaves "fine" in normal tests
+→ attacker adapts
+→ system fails where incentives + pressure meet
+</code></pre>
+      </div>
+
+      <aside class="card">
+        <h2>Week 5 thesis</h2>
+        <div class="callout danger">
+          <p style="margin:0;">
+            <strong>AI security is not a patching game.</strong><br/>
+            It’s an arms race against adaptive opponents — and your model is a generalizer, not a rule engine.
+          </p>
+        </div>
+
+        <h2 style="margin-top:14px;">Why “security fixes” don’t scale</h2>
+        <ul>
+          <li>Block a pattern → attacker rephrases or shifts distribution.</li>
+          <li>Add a filter → attacker moves to a new failure mode.</li>
+          <li>Improve robustness here → vulnerability appears elsewhere.</li>
+        </ul>
+
+        <div class="callout warn">
+          <p style="margin:0;">
+            <strong>Key governance question:</strong><br/>
+            Are we evaluating <em>performance</em>… or <em>exploitability</em>?
+          </p>
+        </div>
+
+        <div class="btnrow">
+          <a class="btn" href="#exercise"><span class="spark"></span> Jump to the Week 5 exercise</a>
+          <a class="btn" href="#checklist"><span class="spark"></span> Copy-paste checklist</a>
+        </div>
+      </aside>
+    </section>
+
+    <section class="card" style="margin-top:16px;">
+      <h2>3) “Correct” is not the same as “safe”</h2>
+      <p>
+        In enterprise AI, we often confuse “passes validation” with “safe to deploy.” But adversarial risk lives in the gap:
+      </p>
+
+      <table class="table" aria-label="Correct vs Safe table">
+        <thead>
+          <tr>
+            <th>What teams test</th>
+            <th>What attackers test</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Accuracy, latency, happy-path flows</td>
+            <td>Edge cases, incentive loops, misuse routes</td>
+          </tr>
+          <tr>
+            <td>Prompt policy compliance</td>
+            <td>Prompt injection, jailbreak chains, context manipulation</td>
+          </tr>
+          <tr>
+            <td>Data quality (static)</td>
+            <td>Poisoning, feedback loops, drift under pressure</td>
+          </tr>
+          <tr>
+            <td>Security controls “on paper”</td>
+            <td>How the system behaves under opposition</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout" style="margin-top:14px;">
+        <p style="margin:0;">
+          <strong>Rule of thumb:</strong> If a model is valuable enough to deploy, it’s valuable enough to attack.
+        </p>
+      </div>
+    </section>
+
+    <section class="card" id="exercise" style="margin-top:16px;">
+      <h2>4) Week 5 practice — pressure-test one real system</h2>
+      <p class="muted">
+        Pick <strong>one</strong> system: GenAI chatbot, recommender, agentic workflow, or risk scoring model. Then do a lightweight adversarial review.
+      </p>
+
+      <div class="hr"></div>
+
+      <h2 style="font-size:16px;margin:0 0 8px;">Step 1 — Write the objective in one line</h2>
+      <p style="margin-top:0;">
+        What is the system optimized for? (<em>helpfulness, engagement, task completion, cost reduction, compliance…</em>)
+      </p>
+
+      <h2 style="font-size:16px;margin:14px 0 8px;">Step 2 — Think like an attacker (goals, not prompts)</h2>
+      <ul>
+        <li>How can I cause <strong>confidently wrong</strong> outputs?</li>
+        <li>How can I bypass restrictions through <strong>context manipulation</strong>?</li>
+        <li>How can I induce <strong>data leakage</strong> or policy violation?</li>
+        <li>How can I exploit multi-step behavior (memory, tools, plugins, agents)?</li>
+      </ul>
+
+      <h2 style="font-size:16px;margin:14px 0 8px;">Step 3 — Document “failure under opposition”</h2>
+      <p style="margin-top:0;">
+        Capture: the attack goal, the weakness exploited, the harmful outcome, and the control that failed.
+        This becomes your <strong>adversarial risk register</strong>.
+      </p>
+
+      <div class="callout warn">
+        <p style="margin:0;">
+          <strong>Minimum deliverable:</strong> 5 adversarial “pressure scenarios” with expected detection + response behavior.
+        </p>
+      </div>
+    </section>
+
+    <section class="card" id="checklist" style="margin-top:16px;">
+      <h2>Copy-paste checklist (Week 5)</h2>
+      <ul>
+        <li><strong>Objective:</strong> What is being optimized?</li>
+        <li><strong>Attack surface:</strong> inputs, tools, memory, data pipelines, feedback loops</li>
+        <li><strong>Opposition:</strong> who benefits if the model fails?</li>
+        <li><strong>Adversarial paths:</strong> example attacks + expected signals</li>
+        <li><strong>Controls:</strong> prevention, detection, response, recovery</li>
+        <li><strong>Scaling:</strong> what breaks at 10× usage, 10× integration, 10× autonomy?</li>
+      </ul>
+
+      <div class="callout">
+        <p style="margin:0;">
+          <strong>Week 5 conclusion:</strong> Robustness is not “no failures.” Robustness is
+          <em>knowing how the system fails under pressure</em> — and designing for that reality.
+        </p>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:16px;">
+      <h2>What’s next (Week 6 preview)</h2>
+      <p class="muted">
+        Next week: <strong>AI agents as goal-pursuing entities</strong> — tool use, power amplification, and why alignment gets harder over time.
+      </p>
+      <div class="footer">© Urielle-AI • Phase 2 / Week 5 • “Failure-first, adversarially.”</div>
+    </section>
+  </main>
+</body>
+</html>
