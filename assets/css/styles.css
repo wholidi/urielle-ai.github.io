@@ -674,3 +674,22 @@ body {
 .weekly-card.card {
   height: 100%;
 }
+
+/* ===== Blog Roadmap Header Pills ===== */
+
+.post-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.post-pill {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,.3);
+  background: rgba(15,23,42,.7);
+  font-size: 12px;
+  letter-spacing: .04em;
+  color: var(--accent-cyan);
+}
