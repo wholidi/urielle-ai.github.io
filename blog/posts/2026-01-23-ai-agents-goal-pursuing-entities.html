@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Week 6 — AI Agents as Goal-Pursuing Entities | Urielle-AI</title>
+  <meta name="description" content="Phase 2 Week 6: AI agents, goal pursuit, tool use, and why alignment gets harder as systems gain agency." />
+
+  <!-- Global site theme -->
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- AI-Thara Hero Styling -->
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --card:#0F1730;
+      --card2:#101B3A;
+      --text:#E7ECFF;
+      --muted:#A9B4E6;
+      --line:rgba(255,255,255,.10);
+      --aqua:#6EE7B7;
+      --violet:#8B5CF6;
+      --cyan:#22D3EE;
+      --warn:#FBBF24;
+      --danger:#FB7185;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --r: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(139,92,246,.22), transparent 55%),
+        radial-gradient(900px 500px at 80% 10%, rgba(34,211,238,.18), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+    }
+
+    .wrap{max-width:1400px;margin:0 auto;padding:28px 18px 72px}
+    .hero-inner{max-width:1400px;margin:0 auto}
+    .sub{max-width:none}
+  </style>
+</head>
+
+<meta charset="UTF-8" />
+  <title>Your AI Doesn’t Fail Randomly. It Fails Strategically</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Why human-in-the-loop controls often fail in real enterprise environments — and what to design instead." />
+
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+  
+<body>
+
+  <header class="site-header">
+    <a href="../../index.html" class="logo">
+      <span class="logo-mark">⛨</span>
+      <span class="logo-text">Urielle-AI</span>
+    </a>
+
+    <nav class="nav">
+      <a href="../../index.html#hero">Home</a>
+      <a href="../../services.html">Services</a>
+      <a href="../index.html" class="active">Blog</a>
+      <a href="../../index.html#contact" class="nav-cta">Contact Us</a>
+    </nav>
+  </header>
+
+    <main class="wrap">
+    <article class="hero">
+      <div class="hero-inner">
+        <!-- WEEK 6 CONTENT START -->
+
+<div class="kicker">
+  <span class="pill"><span class="dot"></span> Urielle-AI </span>
+  <span class="pill">Phase 2 • Week 6</span>
+  <span class="pill">Theme: AI Agents & Power Amplification</span>
+</div>
+
+<h1>Your AI Stops Being a Tool the Moment It Gets Goals.</h1>
+
+<p class="sub">
+  The biggest shift in AI risk isn’t smarter models.  
+  It’s systems that can pursue objectives over time — using tools, memory, and feedback loops.
+</p>
+
+<div class="meta">
+  <span>Mental shift: “What would success look like for the system itself?”</span>
+  <span>Week focus: agency & capability amplification</span>
+  <span>Audience: enterprise + governance builders</span>
+</div>
+
+<section class="grid">
+  <div class="card">
+    <h2>1) What changes when AI becomes agentic?</h2>
+    <p>A model predicts. An <strong>agent pursues outcomes</strong>.</p>
+
+    <div class="callout">
+      <p class="muted" style="margin:0;">
+        Tool AI: <code>Input → Model → Output</code><br/>
+        Agent AI: <code>Goal → Plan → Act → Observe → Adjust</code>
+      </p>
+    </div>
+
+    <ul>
+      <li>chooses actions, not just responses</li>
+      <li>optimizes across time, not one step</li>
+      <li>uses tools to change its environment</li>
+    </ul>
+
+    <p>Risk moves from <em>single-output mistakes</em> to <strong>trajectory mistakes</strong>.</p>
+  </div>
+
+  <aside class="card">
+    <h2>Week 6 thesis</h2>
+
+    <div class="callout danger">
+      <p style="margin:0;">
+        <strong>Agency + tools = power amplification.</strong><br/>
+        Alignment gets harder as systems gain more ways to act.
+      </p>
+    </div>
+
+    <ul>
+      <li>Agents chain actions designers didn’t foresee</li>
+      <li>Small objective errors scale across many steps</li>
+      <li>Systems learn strategies humans didn’t specify</li>
+    </ul>
+
+    <div class="callout warn">
+      <p style="margin:0;">
+        <strong>Key governance question:</strong><br/>
+        Are we evaluating one answer — or a whole decision trajectory?
+      </p>
+    </div>
+  </aside>
+</section>
+
+<section class="card" style="margin-top:16px;">
+  <h2>2) Why alignment gets harder, not easier</h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Before agents</th>
+        <th>With agents</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Single-step outputs</td><td>Multi-step plans</td></tr>
+      <tr><td>Static responses</td><td>Adaptive strategies</td></tr>
+      <tr><td>Local errors</td><td>Compounding errors</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="exercise" style="margin-top:16px;">
+  <h2>3) Week 6 practice — treat the AI as a strategic actor</h2>
+  <ul>
+    <li>What is the long-term objective it optimizes?</li>
+    <li>What tools increase its power?</li>
+    <li>What shortcuts could it learn?</li>
+    <li>What happens if it succeeds too well?</li>
+  </ul>
+</section>
+
+<section class="card" style="margin-top:16px;">
+  <h2>Week 6 conclusion</h2>
+  <p>The moment AI can plan, act, and adjust, we stop managing a tool — and start governing a strategic actor.</p>
+</section>
+
+<section class="card" style="margin-top:16px;">
+  <h2>What’s next (Week 7 preview)</h2>
+  <p class="muted">Containment fallacies — why “we can just shut it down” is often an illusion.</p>
+</section>
+
+<!-- WEEK 6 CONTENT END -->
+
+    </section>
+  </main>
+</body>
+</html>
