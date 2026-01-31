@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Week 6 — AI Agents as Goal-Pursuing Entities.</title>
+  <meta name="description" content="Phase 2 Week 6: AI agents, goal pursuit, tool use, and why alignment gets harder as systems gain agency." />
+
+  <!-- Minimal “AI-Thara” inspired theme (self-contained) -->
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --card:#0F1730;
+      --card2:#101B3A;
+      --text:#E7ECFF;
+      --muted:#A9B4E6;
+      --line:rgba(255,255,255,.10);
+      --glow:rgba(110,231,183,.18);
+      --aqua:#6EE7B7;
+      --violet:#8B5CF6;
+      --cyan:#22D3EE;
+      --warn:#FBBF24;
+      --danger:#FB7185;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --r: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    .hero-inner{
+     max-width: 1400px;
+     margin: 0 auto;
+     }
+.sub{ max-width: none; }
+    
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(139,92,246,.22), transparent 55%),
+        radial-gradient(900px 500px at 80% 10%, rgba(34,211,238,.18), transparent 60%),
+        radial-gradient(700px 500px at 50% 80%, rgba(110,231,183,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+    }
+    a{color:var(--aqua); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width: 980px; margin: 0 auto; padding: 28px 18px 72px}
+    .hero{
+      border:1px solid var(--line);
+      border-radius: calc(var(--r) + 8px);
+      background: linear-gradient(180deg, rgba(15,23,48,.75), rgba(15,23,48,.35));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(900px 200px at 20% 0%, rgba(110,231,183,.25), transparent 60%),
+        radial-gradient(700px 220px at 80% 10%, rgba(139,92,246,.22), transparent 60%);
+      filter: blur(14px);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .hero-inner{position:relative; padding: 28px 26px 22px}
+    .kicker{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      font-family:var(--mono);
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing:.02em;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 6px 10px;
+      border:1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(16,27,58,.55);
+      box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: var(--aqua);
+      box-shadow: 0 0 0 6px rgba(110,231,183,.12);
+    }
+    h1{
+      margin: 14px 0 10px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+    .sub{
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 78ch;
+    }
+    .meta{
+      margin-top: 16px;
+      display:flex; gap:14px; flex-wrap:wrap;
+      color: var(--muted);
+      font-size: 13px;
+      font-family: var(--mono);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    @media (min-width: 900px){
+      .grid{grid-template-columns: 1.2fr .8fr}
+    }
+    .card{
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      background: linear-gradient(180deg, rgba(16,27,58,.72), rgba(16,27,58,.35));
+      box-shadow: 0 18px 50px rgba(0,0,0,.25);
+      padding: 18px 18px;
+    }
+    .card h2{
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing:-0.01em;
+    }
+    .card p{margin: 10px 0; color: var(--text); line-height:1.75}
+    .muted{color: var(--muted)}
+    .hr{
+      height:1px; background: var(--line);
+      margin: 14px 0;
+    }
+    .callout{
+      border:1px solid rgba(110,231,183,.25);
+      background: radial-gradient(500px 120px at 10% 0%, rgba(110,231,183,.12), transparent 60%),
+                  rgba(16,27,58,.45);
+      border-radius: var(--r);
+      padding: 14px 14px;
+      margin: 12px 0;
+    }
+    .callout strong{color: var(--aqua)}
+    .warn{
+      border-color: rgba(251,191,36,.28);
+      background: radial-gradient(500px 120px at 10% 0%, rgba(251,191,36,.12), transparent 60%),
+                  rgba(16,27,58,.45);
+    }
+    .danger{
+      border-color: rgba(251,113,133,.28);
+      background: radial-gradient(500px 120px at 10% 0%, rgba(251,113,133,.10), transparent 60%),
+                  rgba(16,27,58,.45);
+    }
+    ul{margin: 8px 0 0 20px; padding: 0}
+    li{margin: 6px 0; color: var(--text); line-height:1.7}
+    .table{
+      width:100%;
+      border-collapse: collapse;
+      overflow:hidden;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      margin-top: 10px;
+    }
+    .table th, .table td{
+      padding: 12px 12px;
+      border-bottom:1px solid var(--line);
+      vertical-align: top;
+      text-align:left;
+      font-size: 14px;
+      line-height:1.55;
+    }
+    .table th{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing:.03em;
+      background: rgba(15,23,48,.6);
+    }
+    .table tr:last-child td{border-bottom:none}
+    code{
+      font-family: var(--mono);
+      font-size: 13px;
+      color: #D7FFF2;
+      background: rgba(110,231,183,.10);
+      border: 1px solid rgba(110,231,183,.18);
+      padding: 2px 6px;
+      border-radius: 8px;
+    }
+    pre{
+      margin: 12px 0 0;
+      padding: 14px 14px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: rgba(15,23,48,.65);
+      overflow:auto;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+    pre code{
+      border:none; background: transparent; padding:0; border-radius:0; color: var(--text);
+      font-size: 13px;
+    }
+    .footer{
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      font-family: var(--mono);
+      text-align:center;
+    }
+    .btnrow{display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px}
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: rgba(16,27,58,.55);
+      color: var(--text);
+      text-decoration:none;
+      box-shadow: 0 14px 40px rgba(0,0,0,.20);
+      font-family: var(--mono);
+      font-size: 13px;
+    }
+    .btn:hover{border-color: rgba(110,231,183,.35)}
+    .spark{
+      width:10px; height:10px; border-radius: 3px;
+      background: linear-gradient(135deg, var(--aqua), var(--violet));
+      box-shadow: 0 0 0 6px rgba(139,92,246,.10);
+    }
+  </style>
+<head>
+  <meta charset="UTF-8" />
+  <title>Your AI Doesn’t Fail Randomly. It Fails Strategically</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Phase 2 Week 6: AI agents, goal pursuit, tool use, and why alignment gets harder as systems gain agency." />
+
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+  
+<body>
+
+  <header class="site-header">
+    <a href="../../index.html" class="logo">
+      <span class="logo-mark">⛨</span>
+      <span class="logo-text">Urielle-AI</span>
+    </a>
+
+    <nav class="nav">
+      <a href="../../index.html#hero">Home</a>
+      <a href="../../services.html">Services</a>
+      <a href="../index.html" class="active">Blog</a>
+      <a href="../../index.html#contact" class="nav-cta">Contact Us</a>
+    </nav>
+  </header>
+
+    <main class="wrap">
+    <article class="hero">
+      <div class="hero-inner">
+        <div class="kicker">
+          <span class="pill"><span class="dot"></span> Urielle-AI </span>
+          <span class="pill">Phase 2 • Week 6</span>
+          <span class="pill">Theme: AI Agents & Power Amplification</span>
+        </div>
+
+        <h1>Your AI Stops Being a Tool the Moment It Gets Goals.</h1>
+        <p class="sub">
+          The biggest shift in AI risk isn’t smarter models. It’s systems that can pursue objectives over time — using tools, memory, and feedback loops.
+        </p>
+
+        <div class="meta">
+          <span>Mental shift: “What would success look like for the system itself??”</span>
+          <span>Week focus: agency & capability amplification</span>
+          <span>Audience: enterprise + governance builders</span>
+        </div>
+      </div>
+    </article>
+
+    <section class="grid">
+
+     <div class="card">
+        <h2>1) What changes when AI becomes agentic?</h2>
+        <p>A model predicts. An <strong>agent pursues outcomes</strong>.</p>
+
+        <div class="callout">
+          <p class="muted" style="margin:0;">
+            Tool AI: <code>Input → Model → Output</code><br/>
+            Agent AI: <code>Goal → Plan → Act → Observe → Adjust</code>
+          </p>
+        </div>
+
+        <ul>
+          <li>chooses actions, not just responses</li>
+          <li>optimizes across time, not one step</li>
+          <li>uses tools to change its environment</li>
+        </ul>
+
+        <p>Risk moves from <em>single-output mistakes</em> to <strong>trajectory mistakes</strong>.</p>
+      </div>
+    
+      <aside class="card">
+        <h2>Week 6 thesis</h2>
+        <div class="callout danger">
+          <p style="margin:0;">
+            <strong>Agency + tools = power amplification.</strong><br/>
+            Alignment gets harder as systems gain more ways to act.
+          </p>
+        </div>
+
+        <ul>
+          <li>Agents chain actions designers didn’t foresee</li>
+          <li>Small objective errors scale across many steps</li>
+          <li>Systems learn strategies humans didn’t specify</li>
+        </ul>
+
+        <div class="callout warn">
+          <p style="margin:0;">
+            <strong>Key governance question:</strong><br/>
+            Are we evaluating one answer — or a whole decision trajectory?
+          </p>
+        </div>
+      </aside>
+      </section>
+
+    <section class="card" style="margin-top:16px;">
+      <h2>3) “Why alignment gets harder, not easier”</h2>
+      <p>
+    More capability doesn’t reduce risk. It increases the number of paths to unintended outcomes.
+      <p>
+      
+      <table class="table">
+    <thead>
+      <tr>
+        <th>Before agents</th>
+        <th>With agents</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Single-step outputs</td><td>Multi-step plans</td></tr>
+      <tr><td>Static responses</td><td>Adaptive strategies</td></tr>
+      <tr><td>Local errors</td><td>Compounding errors</td></tr>
+    </tbody>
+  </table>
+</section>
+
+    <section class="card" id="exercise" style="margin-top:16px;">
+      <h2>4) Week 6 practice — treat the AI as a strategic actor</h2>
+
+      <p class="muted">
+    Take one AI system and ask:
+      </p>
+
+      <ul>
+        <li>What is the long-term objective it optimizes?</li>
+        <li>What tools increase its power?</li>
+        <li>What shortcuts could it learn?</li>
+        <li>What happens if it succeeds too well?</li>       
+      </ul>
+
+      <div class="callout warn">
+      <p style="margin:0;">
+        <strong>Exercise outcome:</strong> Map the system’s incentives, not just its instructions.
+      </p>
+      </div>
+    </section>
+     
+    <section class="card" style="margin-top:16px;">
+  <h2>Week 6 conclusion</h2>
+
+  <p>
+    The danger isn’t “AI becoming conscious.”  
+    It’s systems that pursue goals competently — with the wrong objective.
+  </p>
+
+  <p>
+    The moment AI can plan, act, and adjust,  
+    we stop managing a tool…  
+    and start governing a strategic actor.
+  </p>
+</section>
+
+    <section class="card" style="margin-top:16px;">
+      <h2>What’s next (Week 7 preview)</h2>
+      <p class="muted">
+        Next week: <strong>Containment fallacies — why “we can just shut it down” is often an illusion.
+        </p>
+        <div class="footer">© Urielle-AI • Phase 2 / Week 6 • “AI Agents as Goal-Pursuing Entities.”</div>
+    </section>
+  </main>
+</body>
+</html>
