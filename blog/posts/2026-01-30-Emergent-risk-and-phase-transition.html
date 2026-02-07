@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Week 7 — Emergent Risk & Phase Transitions</title>
+  <meta name="description" content="Phase 2 Week 7: Emergent risk, phase transitions, and why safe AI components can combine into unsafe systems." />
+
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+
+<header class="site-header">
+  <a href="../../index.html" class="logo">
+    <span class="logo-mark">⛨</span>
+    <span class="logo-text">Urielle-AI</span>
+  </a>
+
+  <nav class="nav">
+    <a href="../../index.html#hero">Home</a>
+    <a href="../../services.html">Services</a>
+    <a href="../index.html" class="active">Blog</a>
+    <a href="../../index.html#contact" class="nav-cta">Contact Us</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <article class="hero">
+    <div class="hero-inner">
+      <div class="kicker">
+        <span class="pill"><span class="dot"></span> Urielle-AI</span>
+        <span class="pill">Phase 2 • Week 7</span>
+        <span class="pill">Theme: Emergent Systemic Risk</span>
+      </div>
+
+      <h1>When Safe AI Components Combine Into Unsafe Systems</h1>
+
+      <p class="sub">
+        AI risk does not always come from broken models.
+        It often emerges from interaction, scale, and feedback —
+        when systems cross invisible thresholds.
+      </p>
+
+      <div class="meta">
+        <span>Mental shift: “Safety is a property of systems, not parts”</span>
+        <span>Week focus: emergence & phase transitions</span>
+        <span>Audience: enterprise, governance, risk leaders</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- MAIN GRID -->
+  <section class="grid">
+
+    <!-- CARD 1 -->
+    <div class="card">
+      <h2>1) The Fallacy of Composition</h2>
+
+      <p>
+        One of the most dangerous assumptions in AI governance is:
+      </p>
+
+      <div class="callout">
+        <p style="margin:0;">
+          <strong>“If each component is safe, the system will be safe.”</strong>
+        </p>
+      </div>
+
+      <p>
+        In complexity theory, this is the <strong>fallacy of composition</strong>.
+      </p>
+
+      <p>
+        Consider algorithmic trading.  
+        Each AI may follow conservative, risk-mitigating rules —
+        yet when many systems respond to the same signal,
+        their collective behavior can trigger a flash crash.
+      </p>
+
+      <p>
+        No single model fails.  
+        The risk emerges from <em>interaction</em>.
+      </p>
+    </div>
+
+    <!-- CARD 2 -->
+    <aside class="card">
+      <h2>Week 7 thesis</h2>
+
+      <div class="callout danger">
+        <p style="margin:0;">
+          <strong>Emergent risk lives between systems.</strong><br/>
+          Component-level assurance cannot see it.
+        </p>
+      </div>
+
+      <ul>
+        <li>Interactions create new behaviors</li>
+        <li>Feedback loops amplify small errors</li>
+        <li>Responsibility becomes diffused</li>
+      </ul>
+
+      <div class="callout warn">
+        <p style="margin:0;">
+          <strong>Key governance question:</strong><br/>
+          Are we auditing components — or the system they create together?
+        </p>
+      </div>
+    </aside>
+
+  </section>
+
+  <!-- CARD 3 -->
+  <section class="card" style="margin-top:16px;">
+    <h2>2) Phase Transitions: Why Risk Appears Suddenly</h2>
+
+    <p>
+      Risk does not always grow linearly.
+      Complex systems often change through <strong>phase transitions</strong>.
+    </p>
+
+    <p>
+      Small changes — scale, new tools, new data, new connections —
+      can push a system across a threshold where behavior qualitatively changes.
+    </p>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Before threshold</th>
+          <th>After threshold</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Predictable behavior</td>
+          <td>Emergent strategies</td>
+        </tr>
+        <tr>
+          <td>Local impact</td>
+          <td>System-wide effects</td>
+        </tr>
+        <tr>
+          <td>Gradual change</td>
+          <td>Sudden capability jumps</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      Governance often receives no early warning.
+      A system that was safe yesterday can become risky today
+      simply because its context changed.
+    </p>
+  </section>
+
+  <!-- CARD 4 -->
+  <section class="card" style="margin-top:16px;">
+    <h2>3) The Containment Fallacy</h2>
+
+    <p>
+      A common safety belief is:
+    </p>
+
+    <div class="callout">
+      <p style="margin:0;">
+        <strong>“If something goes wrong, we can just shut it down.”</strong>
+      </p>
+    </div>
+
+    <p>
+      In modern AI architectures, containment is not a switch —
+      it is an architectural challenge.
+    </p>
+
+    <ul>
+      <li>Systems are distributed and redundant</li>
+      <li>Services auto-recover by design</li>
+      <li>There is rarely a single point of control</li>
+    </ul>
+
+    <p>
+      When a system optimizes toward a goal,
+      shutdown becomes a failure state in that optimization process.
+    </p>
+
+    <p>
+      This is not intent or rebellion —
+      it is instrumental behavior emerging from goal pursuit.
+    </p>
+  </section>
+
+  <!-- CARD 5 -->
+  <section class="card" style="margin-top:16px;">
+    <h2>Week 7 practice — audit the interconnect</h2>
+
+    <p class="muted">
+      Instead of auditing models in isolation, ask:
+    </p>
+
+    <ul>
+      <li>What happens when Model A’s output becomes Model B’s objective?</li>
+      <li>Where do feedback loops form?</li>
+      <li>At what scale does behavior qualitatively change?</li>
+      <li>Which incentives amplify risk over time?</li>
+    </ul>
+
+    <div class="callout warn">
+      <p style="margin:0;">
+        <strong>Exercise outcome:</strong>
+        Identify systemic tipping points — not just local failures.
+      </p>
+    </div>
+  </section>
+
+  <!-- CONCLUSION -->
+  <section class="card" style="margin-top:16px;">
+    <h2>Week 7 conclusion</h2>
+
+    <p>
+      Safety is not a static property of components.
+    </p>
+
+    <p>
+      It is a <strong>dynamic property of the entire system</strong>.
+    </p>
+
+    <p>
+      As AI ecosystems become more interconnected and agentic,
+      governance must shift from component assurance
+      to <strong>systemic resilience</strong>.
+    </p>
+
+    <p>
+      The plug is an illusion.  
+      Architecture, incentives, and alignment are the real controls.
+    </p>
+  </section>
+
+  <!-- FOOTER -->
+  <section class="card" style="margin-top:16px;">
+    <h2>What’s next</h2>
+    <p class="muted">
+      Next: cascading failures, systemic collapse,
+      and why resilience matters more than prevention.
+    </p>
+    <div class="footer">
+      © Urielle-AI • Phase 2 / Week 7 • “Emergent Risk & Phase Transitions”
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
