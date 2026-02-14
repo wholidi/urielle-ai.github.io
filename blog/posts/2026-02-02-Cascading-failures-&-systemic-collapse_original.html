@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Week 8 — Cascading Failure & Systemic Propagation</title>
+  <meta name="description" content="Phase 2 Week 8: Cascading failure, systemic propagation, and why local AI errors can spread across interconnected systems." />
+
+  <!-- Minimal “AI-Thara” inspired theme (self-contained) -->
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --card:#0F1730;
+      --card2:#101B3A;
+      --text:#E7ECFF;
+      --muted:#A9B4E6;
+      --line:rgba(255,255,255,.10);
+      --glow:rgba(110,231,183,.18);
+      --aqua:#6EE7B7;
+      --violet:#8B5CF6;
+      --cyan:#22D3EE;
+      --warn:#FBBF24;
+      --danger:#FB7185;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --r: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(139,92,246,.22), transparent 55%),
+        radial-gradient(900px 500px at 80% 10%, rgba(34,211,238,.18), transparent 60%),
+        radial-gradient(700px 500px at 50% 80%, rgba(110,231,183,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+    }
+    a{color:var(--aqua); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width: 980px; margin: 0 auto; padding: 28px 18px 72px}
+
+    .hero{
+      border:1px solid var(--line);
+      border-radius: calc(var(--r) + 8px);
+      background: linear-gradient(180deg, rgba(15,23,48,.75), rgba(15,23,48,.35));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(900px 200px at 20% 0%, rgba(110,231,183,.25), transparent 60%),
+        radial-gradient(700px 220px at 80% 10%, rgba(139,92,246,.22), transparent 60%);
+      filter: blur(14px);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .hero-inner{position:relative; padding: 28px 26px 22px}
+    .kicker{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      font-family:var(--mono);
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing:.02em;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 6px 10px;
+      border:1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(16,27,58,.55);
+      box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: var(--aqua);
+      box-shadow: 0 0 0 6px rgba(110,231,183,.12);
+    }
+    h1{
+      margin: 14px 0 10px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+    .sub{
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 78ch;
+    }
+    .meta{
+      margin-top: 16px;
+      display:flex; gap:14px; flex-wrap:wrap;
+      color: var(--muted);
+      font-size: 13px;
+      font-family: var(--mono);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    @media (min-width: 900px){
+      .grid{grid-template-columns: 1.2fr .8fr}
+    }
+
+    .card{
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      background: linear-gradient(180deg, rgba(16,27,58,.72), rgba(16,27,58,.35));
+      box-shadow: 0 18px 50px rgba(0,0,0,.25);
+      padding: 18px 18px;
+    }
+    .card h2{
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing:-0.01em;
+    }
+    .card p{margin: 10px 0; color: var(--text); line-height:1.75}
+    .muted{color: var(--muted)}
+    .callout{
+      border:1px solid rgba(110,231,183,.25);
+      background: radial-gradient(500px 120px at 10% 0%, rgba(110,231,183,.12), transparent 60%),
+                  rgba(16,27,58,.45);
+      border-radius: var(--r);
+      padding: 14px 14px;
+      margin: 12px 0;
+    }
+    .callout strong{color: var(--aqua)}
+    .warn{
+      border-color: rgba(251,191,36,.28);
+      background: radial-gradient(500px 120px at 10% 0%, rgba(251,191,36,.12), transparent 60%),
+                  rgba(16,27,58,.45);
+    }
+    .danger{
+      border-color: rgba(251,113,133,.28);
+      background: radial-gradient(500px 120px at 10% 0%, rgba(251,113,133,.10), transparent 60%),
+                  rgba(16,27,58,.45);
+    }
+    ul{margin: 8px 0 0 20px; padding: 0}
+    li{margin: 6px 0; color: var(--text); line-height:1.7}
+
+    .table{
+      width:100%;
+      border-collapse: collapse;
+      overflow:hidden;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      margin-top: 10px;
+    }
+    .table th, .table td{
+      padding: 12px 12px;
+      border-bottom:1px solid var(--line);
+      vertical-align: top;
+      text-align:left;
+      font-size: 14px;
+      line-height:1.55;
+    }
+    .table th{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing:.03em;
+      background: rgba(15,23,48,.6);
+    }
+    .table tr:last-child td{border-bottom:none}
+
+    .footer{
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      font-family: var(--mono);
+      text-align:center;
+    }
+    code{
+      font-family: var(--mono);
+      font-size: 13px;
+      color: #D7FFF2;
+      background: rgba(110,231,183,.10);
+      border: 1px solid rgba(110,231,183,.18);
+      padding: 2px 6px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body>
+<main class="wrap">
+
+  <!-- HERO -->
+  <article class="hero">
+    <div class="hero-inner">
+      <div class="kicker">
+        <span class="pill"><span class="dot"></span> Urielle-AI</span>
+        <span class="pill">Phase 2 • Week 8</span>
+        <span class="pill">Theme: Cascading Failure</span>
+      </div>
+
+      <h1>When Local AI Errors Become Systemic Collapse</h1>
+
+      <p class="sub">
+        AI systems often don’t fail in isolation.
+        The real danger is cascade — when small local failures propagate through interconnected systems.
+      </p>
+
+      <div class="meta">
+        <span>Mental shift: “Failure can spread faster than it appears”</span>
+        <span>Week focus: cascading failure & systemic propagation</span>
+        <span>Audience: enterprise governance & risk leaders</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- MAIN GRID -->
+  <section class="grid">
+
+    <!-- CARD 1 -->
+    <div class="card">
+      <h2>1) Cascading Failure</h2>
+
+      <p class="muted"><strong>From local error to systemic event</strong></p>
+
+      <p>
+        In traditional software systems, a failure is often localized:
+      </p>
+
+      <ul>
+        <li>a bug</li>
+        <li>a crash</li>
+        <li>a corrupted input</li>
+      </ul>
+
+      <p>
+        In complex AI ecosystems, failure can behave differently.
+        A small local misjudgment may:
+      </p>
+
+      <ul>
+        <li>influence downstream models</li>
+        <li>alter future training data</li>
+        <li>shift decision thresholds</li>
+        <li>change incentives across workflows</li>
+      </ul>
+
+      <div class="callout">
+        <p style="margin:0;">
+          The result is not always a single visible failure.<br/>
+          <strong>It can become a cascade.</strong>
+        </p>
+      </div>
+
+      <p>
+        The system can amplify its own error when outputs become inputs and decisions compound.
+      </p>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="card">
+      <h2>Week 8 thesis</h2>
+
+      <div class="callout danger">
+        <p style="margin:0;">
+          <strong>Cascades don’t start large.</strong><br/>
+          They become large because systems are connected.
+        </p>
+      </div>
+
+      <ul>
+        <li>Output becomes future input</li>
+        <li>Feedback loops reinforce signals</li>
+        <li>Automation accelerates propagation</li>
+        <li>Humans may intervene only after signals compound</li>
+      </ul>
+
+      <div class="callout warn">
+        <p style="margin:0;">
+          <strong>Governance question:</strong><br/>
+          Are we designing for containment — or resilience?
+        </p>
+      </div>
+    </aside>
+
+  </section>
+
+  <!-- CARD 2 -->
+  <section class="card" style="margin-top:16px;">
+    <h2>2) Why Cascades Accelerate in AI</h2>
+
+    <p class="muted"><strong>Feedback loops and amplification</strong></p>
+
+    <p>
+      Cascades can accelerate when systems:
+    </p>
+
+    <ul>
+      <li>operate continuously</li>
+      <li>learn from their own outputs (directly or indirectly)</li>
+      <li>influence the environment they later observe</li>
+    </ul>
+
+    <div class="callout warn">
+      <p style="margin:0;">
+        <strong>Illustration (pattern):</strong><br/>
+        A biased recommendation may shift user behavior → the new behavior becomes data → the bias can deepen over time.
+      </p>
+    </div>
+
+    <div class="callout warn">
+      <p style="margin:0;">
+        <strong>Illustration (pattern):</strong><br/>
+        An automated risk model tightens criteria → outcomes change → data distributions shift → the system adapts again.
+      </p>
+    </div>
+
+    <p>
+      When this happens, local correction can turn into systemic distortion.
+    </p>
+  </section>
+
+  <!-- TABLE -->
+  <section class="card" style="margin-top:16px;">
+    <h2>Failure Propagation Map</h2>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Stage</th>
+          <th>What happens</th>
+          <th>Why it escalates</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Local error</td>
+          <td>Model misjudges a case</td>
+          <td>Appears minor or isolated</td>
+        </tr>
+        <tr>
+          <td>Integration</td>
+          <td>Output feeds the next system</td>
+          <td>Error gains authority via reuse</td>
+        </tr>
+        <tr>
+          <td>Feedback</td>
+          <td>System learns from outputs</td>
+          <td>Distortion compounds over time</td>
+        </tr>
+        <tr>
+          <td>Dependence</td>
+          <td>Humans trust automation</td>
+          <td>Intervention may decrease</td>
+        </tr>
+        <tr>
+          <td>Cascade</td>
+          <td>System-wide impact emerges</td>
+          <td>Recovery becomes harder as dependencies grow</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- CARD 3 -->
+  <section class="card" style="margin-top:16px;">
+    <h2>3) Why Governance Misses Cascades</h2>
+
+    <p>
+      Many governance programs evaluate:
+    </p>
+
+    <ul>
+      <li>models individually</li>
+      <li>compliance at a point in time</li>
+      <li>documentation and control presence</li>
+    </ul>
+
+    <p>
+      They often under-test:
+    </p>
+
+    <ul>
+      <li>propagation paths</li>
+      <li>dependency chains</li>
+      <li>dynamic amplification</li>
+      <li>cross-system incentives</li>
+    </ul>
+
+    <div class="callout danger">
+      <p style="margin:0;">
+        By the time failure becomes visible, it may no longer be local.
+      </p>
+    </div>
+
+    <p>
+      Rollback can become difficult when:
+    </p>
+
+    <ul>
+      <li>processes depend on automation</li>
+      <li>downstream systems rely on upstream outputs</li>
+      <li>organizational habits shift around the system</li>
+    </ul>
+
+    <p>
+      This is systemic risk — not just technical error.
+    </p>
+  </section>
+
+  <!-- CARD 4 -->
+  <section class="card" style="margin-top:16px;">
+    <h2>4) Designing for Resilience</h2>
+
+    <p>
+      If failures are inevitable in complex systems, governance must shift from prevention to resilience.
+    </p>
+
+    <p class="muted"><strong>Resilience means:</strong></p>
+    <ul>
+      <li>detecting drift early</li>
+      <li>limiting propagation paths</li>
+      <li>isolating subsystems</li>
+      <li>designing circuit breakers</li>
+      <li>rewarding intervention (not silence)</li>
+    </ul>
+
+    <div class="callout warn">
+      <p style="margin:0;">
+        <strong>Not:</strong> assuming perfection • relying on shutdown myths • trusting metrics alone
+      </p>
+    </div>
+
+    <div class="callout danger">
+      <p style="margin:0;">
+        <strong>Week 8 mental shift:</strong><br/>
+        The question is not whether failure occurs.<br/>
+        The question is how far it spreads.
+      </p>
+    </div>
+
+    <p>
+      AI governance must evolve from:
+      <strong>component validation → cascade containment</strong>.
+      From:
+      <code>“Is this model safe?”</code>
+      to
+      <code>“How does failure propagate through this ecosystem?”</code>
+    </p>
+  </section>
+
+  <!-- FOOTER -->
+  <section class="card" style="margin-top:16px;">
+    <h2>What’s next</h2>
+    <p class="muted">
+      Next: recovery patterns — incident response for AI systems, evidence logs, and how to restore trust after a cascade.
+    </p>
+    <div class="footer">
+      © Urielle-AI • Phase 2 / Week 8 • “Cascading Failure & Systemic Propagation”
+    </div>
+  </section>
+
+</main>
+</body>
+</html>
