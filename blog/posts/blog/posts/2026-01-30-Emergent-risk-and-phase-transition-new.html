@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Week 7 — Emergent Risk & Phase Transitions</title>
+  <meta name="description" content="Phase 2 Week 7: Emergent risk, phase transitions, and why safe AI components can combine into unsafe systems." />
+
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --card:#0F1730;
+      --card2:#101B3A;
+      --text:#E7ECFF;
+      --muted:#A9B4E6;
+      --line:rgba(255,255,255,.10);
+      --aqua:#6EE7B7;
+      --violet:#8B5CF6;
+      --cyan:#22D3EE;
+      --warn:#FBBF24;
+      --danger:#FB7185;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --r: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(139,92,246,.22), transparent 55%),
+        radial-gradient(900px 500px at 80% 10%, rgba(34,211,238,.18), transparent 60%),
+        radial-gradient(700px 500px at 50% 80%, rgba(110,231,183,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+    }
+
+    .wrap{max-width:980px;margin:0 auto;padding:28px 18px 72px}
+
+    .hero{
+      border:1px solid var(--line);
+      border-radius: calc(var(--r) + 8px);
+      background: linear-gradient(180deg, rgba(15,23,48,.75), rgba(15,23,48,.35));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(900px 200px at 20% 0%, rgba(110,231,183,.25), transparent 60%),
+        radial-gradient(700px 220px at 80% 10%, rgba(139,92,246,.22), transparent 60%);
+      filter: blur(14px);
+      opacity:.9;
+      pointer-events:none;
+    }
+
+    .hero-inner{position:relative;padding:28px 26px 22px}
+
+    .kicker{
+      display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+      font-family:var(--mono);
+      font-size:13px;color:var(--muted);
+    }
+
+    .pill{
+      padding:6px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(16,27,58,.55);
+    }
+
+    .dot{
+      width:8px;height:8px;border-radius:999px;
+      background:var(--aqua);
+      display:inline-block;margin-right:6px;
+    }
+
+    h1{
+      margin:14px 0 10px;
+      font-size:clamp(28px,4vw,44px);
+      line-height:1.08;
+      letter-spacing:-0.02em;
+    }
+
+    .sub{
+      margin:0;color:var(--muted);
+      font-size:16px;line-height:1.6;max-width:78ch;
+    }
+
+    .meta{
+      margin-top:16px;
+      display:flex;gap:14px;flex-wrap:wrap;
+      color:var(--muted);
+      font-size:13px;font-family:var(--mono);
+    }
+
+    .grid{
+      display:grid;grid-template-columns:1fr;gap:16px;margin-top:18px;
+    }
+
+    @media (min-width:900px){
+      .grid{grid-template-columns:1.2fr .8fr}
+    }
+
+    .card{
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      background:linear-gradient(180deg, rgba(16,27,58,.72), rgba(16,27,58,.35));
+      box-shadow:0 18px 50px rgba(0,0,0,.25);
+      padding:18px;
+    }
+
+    .card h2{margin:0 0 10px;font-size:18px}
+    .card p{margin:10px 0;line-height:1.75}
+    .muted{color:var(--muted)}
+
+    .callout{
+      border:1px solid rgba(110,231,183,.25);
+      background:rgba(16,27,58,.45);
+      border-radius:var(--r);
+      padding:14px;margin:12px 0;
+    }
+
+    .warn{
+      border-color:rgba(251,191,36,.28);
+    }
+
+    .danger{
+      border-color:rgba(251,113,133,.28);
+    }
+
+    ul{margin:8px 0 0 20px;padding:0}
+    li{margin:6px 0;line-height:1.7}
+
+    .table{
+      width:100%;border-collapse:collapse;
+      border-radius:14px;border:1px solid var(--line);
+      margin-top:10px;overflow:hidden;
+    }
+
+    .table th,.table td{
+      padding:12px;border-bottom:1px solid var(--line);
+      font-size:14px;text-align:left;
+    }
+
+    .table th{
+      font-family:var(--mono);
+      font-size:12px;color:var(--muted);
+      background:rgba(15,23,48,.6);
+    }
+
+    .table tr:last-child td{border-bottom:none}
+
+    .footer{
+      margin-top:18px;color:var(--muted);
+      font-size:13px;font-family:var(--mono);
+      text-align:center;
+    }
+
+    code{
+      font-family:var(--mono);
+      font-size:13px;
+      background:rgba(110,231,183,.10);
+      padding:2px 6px;border-radius:8px;
+    }
+  </style>
+</head>
+
+<body>
+<main class="wrap">
+
+  <!-- HERO -->
+  <article class="hero">
+    <div class="hero-inner">
+      <div class="kicker">
+        <span class="pill"><span class="dot"></span> Urielle-AI</span>
+        <span class="pill">Phase 2 • Week 7</span>
+        <span class="pill">Theme: Emergent Systemic Risk</span>
+      </div>
+
+      <h1>When Safe AI Components Combine Into Unsafe Systems</h1>
+
+      <p class="sub">
+        AI risk does not always come from broken models.
+        It often emerges from interaction, scale, and feedback —
+        when systems cross invisible thresholds.
+      </p>
+
+      <div class="meta">
+        <span>Mental shift: “Safety is a property of systems, not parts”</span>
+        <span>Week focus: emergence & phase transitions</span>
+        <span>Audience: enterprise governance & risk leaders</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- GRID -->
+  <section class="grid">
+
+    <div class="card">
+      <h2>1) The Fallacy of Composition</h2>
+
+      <p>One of the most dangerous assumptions in AI governance is:</p>
+
+      <div class="callout">
+        <strong>“If each component is safe, the system will be safe.”</strong>
+      </div>
+
+      <p>
+        In complexity theory, this is the fallacy of composition.
+      </p>
+
+      <p>
+        Consider algorithmic trading.
+        Each AI may follow conservative rules —
+        yet when many systems respond to the same signal,
+        their collective behavior can trigger a flash crash.
+      </p>
+
+      <p>
+        No single model fails.
+        The risk emerges from interaction.
+      </p>
+    </div>
+
+    <aside class="card">
+      <h2>Week 7 thesis</h2>
+
+      <div class="callout danger">
+        <strong>Emergent risk lives between systems.</strong><br/>
+        Component-level assurance cannot see it.
+      </div>
+
+      <ul>
+        <li>Interactions create new behaviors</li>
+        <li>Feedback loops amplify small errors</li>
+        <li>Responsibility becomes diffused</li>
+      </ul>
+
+      <div class="callout warn">
+        <strong>Governance question:</strong><br/>
+        Are we auditing components — or the system they create together?
+      </div>
+    </aside>
+
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="card" style="margin-top:16px;">
+    <h2>2) Phase Transitions</h2>
+
+    <p>
+      Risk does not always grow linearly.
+      Complex systems often change through phase transitions.
+    </p>
+
+    <p>
+      Small changes — scale, new tools, new data, new connections —
+      can push a system across a threshold
+      where behavior qualitatively changes.
+    </p>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Before threshold</th>
+          <th>After threshold</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Predictable behavior</td>
+          <td>Emergent strategies</td>
+        </tr>
+        <tr>
+          <td>Local impact</td>
+          <td>System-wide effects</td>
+        </tr>
+        <tr>
+          <td>Gradual change</td>
+          <td>Sudden capability jumps</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      A system that was safe yesterday can become risky today
+      simply because its context changed.
+    </p>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="card" style="margin-top:16px;">
+    <h2>3) The Containment Fallacy</h2>
+
+    <p>A common safety belief is:</p>
+
+    <div class="callout">
+      <strong>“If something goes wrong, we can just shut it down.”</strong>
+    </div>
+
+    <p>
+      In modern AI architectures, containment is not a switch —
+      it is an architectural challenge.
+    </p>
+
+    <ul>
+      <li>Systems are distributed and redundant</li>
+      <li>Services auto-recover by design</li>
+      <li>There is rarely a single point of control</li>
+    </ul>
+
+    <p>
+      Shutdown becomes a failure state inside optimization.
+      This is not rebellion —
+      it is instrumental behavior emerging from goal pursuit.
+    </p>
+  </section>
+
+  <!-- CONCLUSION -->
+  <section class="card" style="margin-top:16px;">
+    <h2>Week 7 conclusion</h2>
+
+    <p>Safety is not a static property of components.</p>
+
+    <p>
+      It is a <strong>dynamic property of the entire system.</strong>
+    </p>
+
+    <p>
+      As AI ecosystems become more interconnected and agentic,
+      governance must shift from:
+      <strong>component assurance → systemic resilience.</strong>
+    </p>
+
+    <div class="footer">
+      © Urielle-AI • Phase 2 / Week 7 • “Emergent Risk & Phase Transitions”
+    </div>
+  </section>
+
+</main>
+</body>
+</html>
