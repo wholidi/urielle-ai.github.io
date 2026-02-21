@@ -693,3 +693,21 @@ body {
   letter-spacing: .04em;
   color: var(--accent-cyan);
 }
+
+.phases-layout {
+  display: grid;
+  gap: 1.8rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+
+/* force each phase’s weeks into a single column */
+.phases-layout .weekly-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (max-width: 980px) {
+  .phases-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
