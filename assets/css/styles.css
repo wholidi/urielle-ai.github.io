@@ -663,6 +663,11 @@ body {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+/* force each phase’s weeks into a single column */
+.phases-layout .weekly-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 /* Match your responsive breakpoints */
 @media (max-width: 980px) {
   .weekly-grid {
