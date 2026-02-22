@@ -678,8 +678,8 @@ body {
 .hero-inner,
 .card{
   max-width: 900px;
-  margin-left:auto;
-  margin-right:auto;
+  margin-left:0;
+  margin-right:0;
 }
 
 /* Readability: cap line length */
