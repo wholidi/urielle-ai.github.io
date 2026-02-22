@@ -687,3 +687,59 @@ body {
 .sub{
   max-width: 78ch;
 }
+
+/* ===== Blog Roadmap (3-column phase table) ===== */
+
+.roadmap {
+  margin-top: 2rem;
+}
+
+.roadmap-head {
+  margin-bottom: 1rem;
+  max-width: 52rem;
+}
+
+.roadmap-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.roadmap-col {
+  border: 1px solid rgba(148,163,184,.18);
+  background: rgba(15,23,42,.35);
+  border-radius: var(--radius-xl);
+  padding: 1rem;
+}
+
+.roadmap-title {
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: .75rem;
+  padding-bottom: .6rem;
+  border-bottom: 1px solid rgba(148,163,184,.14);
+}
+
+.roadmap-item {
+  display: block;
+  padding: .55rem .7rem;
+  border-radius: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  border: 1px solid transparent;
+  margin-bottom: .5rem;
+  background: rgba(2,6,23,.35);
+}
+
+.roadmap-item:hover {
+  color: var(--text);
+  border-color: rgba(34,211,238,.35);
+  background: rgba(2,6,23,.55);
+}
+
+/* Mobile: stack to 1 column */
+@media (max-width: 980px) {
+  .roadmap-grid {
+    grid-template-columns: 1fr;
+  }
+}
