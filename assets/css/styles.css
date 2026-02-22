@@ -534,215 +534,156 @@ body {
   }
 }
 
-/* ===== Services CTA Button ===== */
 
-.section-cta {
-  text-align: center;
-  margin-top: 3rem;
+/* ===== Services CTA Button (scoped) ===== */
+.section-cta{
+  text-align:center;
+  margin-top:3rem;
 }
-
-.btn-primary {
-  padding: 0.75rem 1.75rem;
+/* Keep your global .btn-primary (violet/cyan) intact.
+   Only change the Services CTA button variant inside .section-cta */
+.section-cta .btn-primary{
+  padding:0.75rem 1.75rem;
   background: linear-gradient(135deg, #5b8cff, #8fd3f4);
-  color: #fff;
-  text-decoration: none;
-  border-radius: 6px;
-  font-weight: 600;
+  color:#fff;
+  text-decoration:none;
+  border-radius:6px;
+  font-weight:600;
 }
-
-.btn-primary:hover {
-  opacity: 0.9;
-}
+.section-cta .btn-primary:hover{ opacity:0.9; }
 
 /* ===== Active Navigation State ===== */
-
-.nav a.active {
-  color: #8fd3f4;
-  font-weight: 600;
-  position: relative;
+.nav a.active{
+  color:#8fd3f4;
+  font-weight:600;
+  position:relative;
 }
-
-.nav a.active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  width: 100%;
-  height: 2px;
+.nav a.active::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:100%;
+  height:2px;
   background: linear-gradient(135deg, #5b8cff, #8fd3f4);
-  border-radius: 2px;
-}
-
-/* ===== Active Navigation State ===== */
-
-.nav a.active {
-  color: #8fd3f4;
-  font-weight: 600;
-  position: relative;
-}
-
-.nav a.active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(135deg, #5b8cff, #8fd3f4);
-  border-radius: 2px;
+  border-radius:2px;
 }
 
 /* ===== Active Logo State ===== */
-
-.logo.active {
-  color: #8fd3f4;
-  font-weight: 600;
-  position: relative;
+.logo.active{
+  color:#8fd3f4;
+  font-weight:600;
+  position:relative;
 }
-
-.logo.active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  width: 100%;
-  height: 2px;
+.logo.active::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:100%;
+  height:2px;
   background: linear-gradient(135deg, #5b8cff, #8fd3f4);
-  border-radius: 2px;
+  border-radius:2px;
 }
 
 /* ===== BLOG PHASE GROUPING (Phase 1 / Phase 2) ===== */
+.phase{ margin-top:2rem; }
 
-.phase {
-  margin-top: 2rem;
+.phase-head{
+  margin-bottom:1.1rem;
+  max-width:52rem;
 }
 
-.phase-head {
-  margin-bottom: 1.1rem;
-  max-width: 52rem;
-}
-
-.phase-kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  padding: 0.35rem 0.85rem;
+.phase-kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:0.55rem;
+  padding:0.35rem 0.85rem;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(148, 163, 184, 0.28);
-  background: rgba(15, 23, 42, 0.65);
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  border:1px solid rgba(148,163,184,0.28);
+  background: rgba(15,23,42,0.65);
+  font-size:0.75rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
   color: var(--accent-cyan);
 }
-
-.phase-kicker::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
+.phase-kicker::before{
+  content:"";
+  width:8px;
+  height:8px;
+  border-radius:999px;
   background: linear-gradient(120deg, var(--accent-violet), var(--accent-cyan));
-  box-shadow: 0 0 14px rgba(56, 189, 248, 0.55);
+  box-shadow: 0 0 14px rgba(56,189,248,0.55);
 }
 
-.phase-title {
-  margin: 0.8rem 0 0.35rem;
-  font-size: 1.6rem;
+.phase-title{
+  margin:0.8rem 0 0.35rem;
+  font-size:1.6rem;
 }
-
-.phase-desc {
-  margin: 0;
+.phase-desc{
+  margin:0;
   color: var(--muted);
-  line-height: 1.7;
+  line-height:1.7;
 }
 
-/* Weekly cards grid that becomes 3 columns on desktop */
-.weekly-grid {
-  display: grid;
-  gap: 1.6rem;
+/* ===== Blog index layout: Phase sections stacked ===== */
+.phases-layout{
+  display:grid;
+  gap:1.8rem;
+  grid-template-columns: 1fr; /* single column layout for phases */
+  align-items:start;
+}
+
+/* Weekly cards: single column (Phase 1 → single column as requested) */
+.weekly-grid{
+  display:grid;
+  gap:1.6rem;
   grid-template-columns: 1fr;
 }
 
-/* force each phase’s weeks into a single column */
-.phases-layout .weekly-grid {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-/* Match your responsive breakpoints */
-@media (max-width: 980px) {
-  .weekly-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* Optional: make weekly cards use your existing .card style */
-.weekly-card.card {
-  height: 100%;
-}
+/* Keep weekly cards stacked even if you later change .phases-layout to 2 columns */
+.phase .weekly-grid{ grid-template-columns: 1fr; }
 
 /* ===== Blog Roadmap Header Pills ===== */
-
-.post-kicker {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 18px;
+.post-kicker{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:18px;
 }
-
-.post-pill {
-  padding: 6px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(148,163,184,.3);
+.post-pill{
+  padding:6px 14px;
+  border-radius:999px;
+  border:1px solid rgba(148,163,184,.3);
   background: rgba(15,23,42,.7);
-  font-size: 12px;
-  letter-spacing: .04em;
+  font-size:12px;
+  letter-spacing:.04em;
   color: var(--accent-cyan);
 }
 
-/* ===== Phase Layout ===== */
-
-.phases-layout {
-  display: grid;
-  gap: 1.8rem;
-  grid-template-columns: repeat(0, minmax(0, 1fr));
-  align-items: start;
-}
-
-/* force each phase’s weeks into a single column */
-.phases-layout .weekly-grid {
-  grid-template-columns: minmax(0, 1fr);
-
-  /* Guaranteed: weekly cards inside a phase are single column */
-.phase .weekly-grid {
-  grid-template-columns: 1fr !important;
-}
-
-@media (max-width: 980px) {
-  .phases-layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
+/* Optional: make weekly cards use your existing .card style */
+.weekly-card.card{ height:100%; }
 
 /* ============================= */
-/* Blog Post Layout Control */
+/* Blog Post Layout Control      */
 /* ============================= */
-
-.wrap {
+/* Any blog post using <main class="wrap"> will be constrained */
+.wrap{
   max-width: 980px;
   margin: 0 auto;
   padding: 40px 20px 80px;
 }
 
-/* Limit readable line length */
+/* Constrain hero and cards to prevent overly wide reading lines */
 .hero-inner,
-.card {
+.card{
   max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left:auto;
+  margin-right:auto;
 }
 
-/* Limit paragraph width for better readability */
+/* Readability: cap line length */
 .card p,
-.sub {
+.sub{
   max-width: 78ch;
 }
