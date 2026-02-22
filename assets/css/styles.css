@@ -711,6 +711,10 @@ body {
 /* force each phase’s weeks into a single column */
 .phases-layout .weekly-grid {
   grid-template-columns: minmax(0, 1fr);
+
+  /* Guaranteed: weekly cards inside a phase are single column */
+.phase .weekly-grid {
+  grid-template-columns: 1fr !important;
 }
 
 @media (max-width: 980px) {
