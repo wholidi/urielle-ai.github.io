@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Week 9 — Why Checklist Governance Fails Adaptive AI Systems</title>
+  <meta name="description" content="Phase 2 Week 9: Why checklist-based AI governance creates false confidence in adaptive systems — and why governance must evolve into architecture." />
+
+  <!-- Minimal “AI-Thara” inspired theme -->
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --card:#0F1730;
+      --text:#E7ECFF;
+      --muted:#A9B4E6;
+      --line:rgba(255,255,255,.10);
+      --aqua:#6EE7B7;
+      --violet:#8B5CF6;
+      --cyan:#22D3EE;
+      --warn:#FBBF24;
+      --danger:#FB7185;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --r: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(139,92,246,.22), transparent 55%),
+        radial-gradient(900px 500px at 80% 10%, rgba(34,211,238,.18), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+    }
+    .wrap{max-width: 980px; margin: 0 auto; padding: 28px 18px 72px}
+    .hero{
+      border:1px solid var(--line);
+      border-radius: calc(var(--r) + 8px);
+      background: linear-gradient(180deg, rgba(15,23,48,.75), rgba(15,23,48,.35));
+      box-shadow: var(--shadow);
+      padding: 28px 26px 22px;
+    }
+    h1{
+      margin: 14px 0 10px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+    .sub{
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 78ch;
+    }
+    .meta{
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 13px;
+      font-family: var(--mono);
+    }
+    .card{
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      background: linear-gradient(180deg, rgba(16,27,58,.72), rgba(16,27,58,.35));
+      box-shadow: 0 18px 50px rgba(0,0,0,.25);
+      padding: 18px 18px;
+      margin-top: 18px;
+    }
+    .card h2{
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+    .card p{margin: 10px 0; line-height:1.75}
+    ul{margin: 8px 0 0 20px}
+    .callout{
+      border:1px solid rgba(251,113,133,.28);
+      background: rgba(16,27,58,.45);
+      border-radius: var(--r);
+      padding: 14px;
+      margin: 12px 0;
+    }
+    .callout strong{color: var(--aqua)}
+    code{
+      font-family: var(--mono);
+      font-size: 13px;
+      background: rgba(110,231,183,.10);
+      padding: 2px 6px;
+      border-radius: 8px;
+    }
+    .footer{
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      font-family: var(--mono);
+      text-align:center;
+    }
+  </style>
+
+  <link rel="stylesheet" href="../../assets/css/styles.css" />
+</head>
+
+<body>
+
+<main class="wrap">
+
+  <article class="hero">
+    <h1>Why Checklist Governance Fails Adaptive AI Systems</h1>
+
+    <p class="sub">
+      Most AI governance programs are built to verify controls.
+      Adaptive AI systems evolve through interaction, feedback, and scale.
+      When systems change, checklists can create false confidence.
+    </p>
+
+    <div class="meta">
+      Phase 2 • Week 9 • Mental shift: “Control presence ≠ system safety”
+    </div>
+  </article>
+
+  <section class="card">
+    <h2>1) The Compliance Illusion</h2>
+
+    <p>
+      Governance often asks:
+      <strong>“Do we have the right controls in place?”</strong>
+    </p>
+
+    <ul>
+      <li>Documented policies</li>
+      <li>Risk registers</li>
+      <li>Approval gates</li>
+      <li>Fairness and privacy tests</li>
+    </ul>
+
+    <div class="callout">
+      <strong>But presence is not proof.</strong><br/>
+      A system can pass every checklist and still fail in production.
+    </div>
+
+    <p>
+      Checklists validate intention.
+      They rarely validate behavior under change.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>2) Adaptive Systems Break Static Assumptions</h2>
+
+    <p>
+      Traditional governance assumes stability:
+      evaluate → document → approve.
+    </p>
+
+    <p>
+      Adaptive AI ecosystems violate that model:
+    </p>
+
+    <ul>
+      <li>Risk propagates across dependencies</li>
+      <li>Feedback loops amplify small signals</li>
+      <li>Context shifts alter behavior</li>
+      <li>Ownership becomes distributed</li>
+    </ul>
+
+    <p>
+      A compliant system can become risky without breaking a single written rule.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>3) What Governance Rarely Tests</h2>
+
+    <ul>
+      <li>Propagation paths between systems</li>
+      <li>Cross-model dependency chains</li>
+      <li>Dynamic amplification under stress</li>
+      <li>Operational pressure and incentives</li>
+      <li>Vendor and third-party coupling</li>
+    </ul>
+
+    <div class="callout">
+      Risk rarely lives inside one model.<br/>
+      It lives in the connections.
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>4) Governance as Architecture</h2>
+
+    <p>
+      If systems evolve continuously, governance cannot be periodic inspection.
+      It must be structural design.
+    </p>
+
+    <ul>
+      <li>Early drift detection</li>
+      <li>Propagation limits</li>
+      <li>Circuit breakers</li>
+      <li>Evidence logging</li>
+      <li>Stress testing</li>
+    </ul>
+
+    <p>
+      Governance must shape system behavior — not just document it.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Week 9 Conclusion</h2>
+
+    <p>
+      The question is no longer:
+      <code>“Is this model compliant?”</code>
+    </p>
+
+    <p>
+      It is:
+      <code>“Does our governance architecture understand systemic risk?”</code>
+    </p>
+
+    <div class="footer">
+      © Urielle-AI • 2026-02-13 • Phase 2 / Week 9
+    </div>
+  </section>
+
+</main>
+</body>
+</html>
