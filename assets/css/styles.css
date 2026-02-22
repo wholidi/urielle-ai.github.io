@@ -660,7 +660,7 @@ body {
 .weekly-grid {
   display: grid;
   gap: 1.6rem;
-  grid-template-columns: repeat(0, minmax(0, 1fr));
+  grid-template-columns: 1fr;
 }
 
 /* force each phase’s weeks into a single column */
