@@ -2,28 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Services | Urielle-AI</title>
-
-  <!-- Use the same CSS as your homepage -->
+  <meta name="description" content="Independent AI system architecture reviews, AI governance and ISO/IEC 42001 readiness, and GenAI security and safety assessments from Urielle-AI." />
   <link rel="stylesheet" href="assets/css/styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-
-  <meta name="description" content="Urielle-AI services: AI governance & audit, GenAI security & safety reviews, post-market monitoring, and AI assurance storytelling.">
+  <style>
+    /* Small additions only; existing site typography and card styling are preserved. */
+    .service-card { display: flex; flex-direction: column; }
+    .service-card .service-action { margin-top: auto; padding-top: 1.25rem; }
+    .service-card .service-action a { color: #66ddce; font-weight: 600; text-decoration: none; }
+    .service-card .service-action a:hover,
+    .service-card .service-action a:focus-visible { text-decoration: underline; }
+    .service-summary { max-width: 760px; margin-inline: auto; }
+    .service-note { text-align: center; margin-top: 1.75rem; }
+  </style>
 </head>
-
 <body>
-
-  <!-- Use the same header style/classes as your index.html if you have them -->
   <header class="site-header">
     <div class="container">
       <a class="logo" href="index.html">Urielle-AI</a>
-      <nav class="nav">
+      <nav class="nav" aria-label="Main navigation">
         <a href="index.html#hero">Home</a>
         <a href="blog/index.html">Blog</a>
-        <a href="services.html" class="active">Services</a>
+        <a href="services.html" class="active" aria-current="page">Services</a>
         <a href="index.html#portfolio">Portfolio</a>
         <a href="index.html#ai-thara">AI-Thara</a>
         <a href="index.html#about">About</a>
@@ -33,134 +37,49 @@
   </header>
 
   <main>
-
-    <!-- HERO (optional but matches theme if you use section blocks) -->
     <section class="section">
       <div class="section-header">
-        <h1>Services</h1>
-        <p>
-          Deep, practical AI governance for real systems—aligned with ISO/IEC 42001, the EU AI Act, AI Verify,
-          and adversarial safety thinking.
-        </p>
+        <h1>Our Services</h1>
+        <p>Independent AI reviews, governance and assurance to help organizations make informed decisions and manage AI risks.</p>
       </div>
 
       <div class="grid grid-3">
-        <article class="card">
-          <h3>AI Governance & Audit</h3>
-          <p>
-            Independent review of AI systems against regulations and good practice.
-          </p>
-          <ul>
-            <li>EU AI Act readiness & risk classification</li>
-            <li>Governance controls & gap analysis</li>
-            <li>Audit-ready evidence & documentation</li>
-          </ul>
+        <article class="card service-card">
+          <h3>AI System Review</h3>
+          <p>Independent assessment of AI architecture, technical decisions, engineering controls and deployment readiness.</p>
+          <p class="service-action"><a href="urielle-ai-system-review.html">Explore AI System Review &rarr;</a></p>
         </article>
 
-        <article class="card">
-          <h3>ISO/IEC 42001 AIMS Readiness</h3>
-          <p>
-            Practical support for building audit-ready AI Management System evidence.
-          </p>
-          <ul>
-            <li>AIMS scope, context, and stakeholder mapping</li>
-            <li>Clause-by-clause evidence readiness review</li>
-            <li>Templates, audit questions, and evidence repository design</li>
-          </ul>
-          <p>
-            <a href="https://github.com/wholidi/Urielle-ISO42001-AIMS-Toolkit/tree/main" target="_blank" rel="noopener noreferrer">
-              View ISO 42001 AIMS Toolkit
-            </a>
-          </p>
-        </article>
-           
-        <article class="card">
-          <h3>GenAI Security & Safety Review</h3>
-          <p>
-            Assess LLM/GenAI solutions for real-world abuse and safety failures.
-          </p>
-          <ul>
-            <li>Prompt injection & jailbreak assessment</li>
-            <li>Data leakage and unsafe output risks</li>
-            <li>Guardrail + policy recommendations</li>
-          </ul>
+        <article class="card service-card">
+          <h3>AI Governance &amp; Audit</h3>
+          <p>Governance gap assessments, ISO/IEC 42001 AIMS readiness and EU AI Act advisory support.</p>
+          <p class="service-action"><a href="https://github.com/wholidi/Urielle-ISO42001-AIMS-Toolkit" target="_blank" rel="noopener noreferrer">Explore the AIMS Toolkit &rarr;</a></p>
         </article>
 
-        <article class="card">
-          <h3>AI Assurance Storytelling</h3>
-          <p>
-            Translate assurance work into visual narratives for leadership and regulators.
-          </p>
-          <ul>
-            <li>AI-Thara cinematic explainers</li>
-            <li>Board-level story decks</li>
-            <li>Training & awareness assets</li>
-          </ul>
+        <article class="card service-card">
+          <h3>GenAI Security &amp; Safety Review</h3>
+          <p>Evaluate LLM and agentic AI risks, evidence grounding, safeguards and human oversight.</p>
+          <p class="service-action"><a href="mailto:wholidipro@urielle-ai.com?subject=GenAI%20Security%20and%20Safety%20Review%20Enquiry">Enquire about this service &rarr;</a></p>
         </article>
       </div>
     </section>
 
-    <!-- DETAILED SERVICES (cards style, same theme) -->
     <section class="section">
-      <div class="section-header">
-        <h2>What we deliver</h2>
-        <p>Clear deliverables you can use for governance, procurement, and regulatory readiness.</p>
+      <div class="section-header service-summary">
+        <h2>What you receive</h2>
+        <p>Clear, evidence-based findings, prioritized risks and practical recommendations suited to your system's maturity and the agreed review scope.</p>
       </div>
-
-      <div class="grid grid-3">
-        <article class="card">
-          <h3>EU AI Act Readiness Pack</h3>
-          <ul>
-            <li>System inventory + intended purpose</li>
-            <li>Risk classification and obligations mapping</li>
-            <li>Compliance gap list with priorities</li>
-            <li>Roadmap: people, process, controls, evidence</li>
-          </ul>
-        </article>
-
-        <article class="card">
-          <h3>AI Failure-Mode Assessment</h3>
-          <ul>
-            <li>Misuse + abuse-case analysis</li>
-            <li>Oversight breakdown scenarios</li>
-            <li>Incentive misalignment review</li>
-            <li>Mitigations: technical + governance controls</li>
-          </ul>
-        </article>
-
-        <article class="card">
-          <h3>Human Oversight & Control Design</h3>
-          <ul>
-            <li>Human-in-the-loop effectiveness review</li>
-            <li>Escalation paths and intervention points</li>
-            <li>Operational “kill-switch” feasibility</li>
-            <li>Runbook for incidents and overrides</li>
-          </ul>
-        </article>
-
-        <article class="card">
-          <h3>Post-Market Monitoring</h3>
-          <ul>
-            <li>Monitoring plan (drift, misuse, incidents)</li>
-            <li>Metrics + thresholds + alerting</li>
-            <li>Reporting workflow & ownership</li>
-            <li>Continuous improvement loop</li>
-          </ul>
-        </article>
-      </div>
-
       <div class="section-cta">
-        <a href="index.html#contact" class="btn btn-primary">Contact Urielle-AI</a>
+        <a href="index.html#contact" class="btn btn-primary">Discuss Your AI Project</a>
       </div>
+      <p class="service-note">Need an executive briefing or AI assurance storytelling? <a href="index.html#contact">Ask us about supporting services.</a></p>
     </section>
-
   </main>
 
   <footer class="site-footer">
     <div class="container">
-      <p>© 2025 Urielle-AI. Independent AI Governance & Safety Advisory.</p>
+      <p>&copy; 2026 Urielle-AI. Independent AI Governance &amp; Safety Advisory.</p>
     </div>
   </footer>
-
 </body>
 </html>
